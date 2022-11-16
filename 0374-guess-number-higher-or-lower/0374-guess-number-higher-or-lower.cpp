@@ -10,18 +10,20 @@
 class Solution {
 public:
     int guessNumber(int n) {
-        if(guess(n)==0){
-            return n;
+        int low=1;
+        int high=n;
+        while(1){
+            int number=low+(high-low)/2;
+            if(guess(number)==0){
+                return number;
+            }
+            else if(guess(number)==-1){
+                high=number-1;
+            }
+            else if(guess(number)==1){
+                low=number+1;
+            }
         }
-        if(guess(n)==-1){
-           n-=1;
-        }
-        else if(guess(n)==1){
-            n+=1;
-        
-        }
-        
-        return guessNumber(n);
        
     }
 };
