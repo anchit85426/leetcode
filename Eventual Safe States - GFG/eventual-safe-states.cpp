@@ -34,6 +34,9 @@ class Solution {
   public:
     vector<int> eventualSafeNodes(int N, vector<int> adj[]) {
         // code here
+       // if cycel is there and it would not reach ther terminal node
+       // ther node that has outgoing edge to cycle containing node would also not reach the terminal node
+       // pathvis would be 1 at last of cycle containing node
        
         int vis[N]={0};
         int check[N]={0};
@@ -50,7 +53,13 @@ class Solution {
                 ans.push_back(i);
             }
         }
-        return ans;
+        vector<int>ans2;
+        for(int i=0;i<N;i++){
+            if(pathvis[i]==0){
+                ans2.push_back(i);
+            }
+        }
+        return ans2;
         
     }
 };
