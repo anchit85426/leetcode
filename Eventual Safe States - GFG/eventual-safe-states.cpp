@@ -11,8 +11,7 @@ using namespace std;
 class Solution {
         private: 
         bool dfs(int node,int vis[],int pathvis[],int check[],vector<int>adj[]){
-            vis[node]=1;
-            pathvis[node]=1;
+            vis[node]=2;
             check[node]=0;
             for(auto it :adj[node]){
                 if(!vis[it]){
@@ -21,12 +20,14 @@ class Solution {
                         return true;  
                     } 
                 }   
-                else if(pathvis[it]){
+                else if(vis[it]==2){
+                    
                     check[node]=0;
                     return true;
                 }
             }
             check[node]=1;
+            vis[node]=1;
             pathvis[node]=0;
             return false;
            
@@ -55,7 +56,7 @@ class Solution {
         }
         vector<int>ans2;
         for(int i=0;i<N;i++){
-            if(pathvis[i]==0){
+            if(vis[i]==1){
                 ans2.push_back(i);
             }
         }
