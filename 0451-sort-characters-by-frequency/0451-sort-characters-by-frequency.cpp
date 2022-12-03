@@ -1,15 +1,24 @@
 class Solution {
 public:
     string frequencySort(string s) {
-        int count[256]={0};
-        for(char it:s){
-            count[it]++;
+        map<char,int>mpp;
+        vector<pair<int,char>>v;
+        for(char it :s){mpp[it]++;}
+        for(auto it :mpp){
+            v.push_back({it.second,it.first});
         }
-        sort(s.begin(),s.end(),[&](char a,char b){
-            return (count[a]>count[b] or count[a]==count[b] and a<b);
-        });
+        string ans="";
+        sort(v.begin(),v.end());
+       
+        for(auto it :v){
+            ans.append(it.first,it.second);
+        }
+        reverse(ans.begin(),ans.end());
+      
+        return ans;
         
         
-        return s;
+        
+        
     }
 };
