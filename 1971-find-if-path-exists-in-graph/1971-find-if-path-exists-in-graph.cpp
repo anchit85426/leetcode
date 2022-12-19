@@ -9,7 +9,7 @@ class Solution {
                 return true;
             }
             if(!vis[it]){
-                dfs(it,destionation,adj,vis);
+               if( dfs(it,destionation,adj,vis)) return true;
             }
         }
         return false;
@@ -25,7 +25,7 @@ public:
             adj[it[0]].push_back(it[1]);
             adj[it[1]].push_back(it[0]);
         }
-         dfs(source,destination,adj,vis);
-        return vis[destination];
+       return   dfs(source,destination,adj,vis);
+      
     }
 };
