@@ -27,9 +27,7 @@ public:
                 if(s[i-1]==t[j-1]){
                     prev[j]=prev[j-1]+prev[j];
                 }
-                else{
-                    prev[j]=prev[j];
-                }
+                
             }
             
         }
