@@ -3,7 +3,7 @@ public:
     int numEnclaves(vector<vector<int>>& grid) {
         int n=grid.size();
         int m=grid[0].size();
-        vector<vector<int>>vis(n+1,vector<int>(m+1,0));
+        
         queue<pair<int,int>>q;
         int count=0;
         for(auto it :grid){
@@ -15,12 +15,12 @@ public:
         }
         for(int i=0;i<n;i++){
           
-             if(grid[i][0]==1 and vis[i][0]==0){
+             if(grid[i][0]==1 ){
                 q.push({i,0});
                
             }
             
-             if(grid[i][m-1]==1 and vis[i][m-1]==0){
+             if(grid[i][m-1]==1 ){
                 q.push({i,m-1});
                
             }
@@ -29,12 +29,12 @@ public:
         }
          for(int i=0;i<m;i++){
           
-             if(grid[0][i]==1 and vis[0][i]==0){
+             if(grid[0][i]==1 ){
                 q.push({0,i});
                
             }
             
-             if(grid[n-1][i]==1 and vis[n-1][i]==0){
+             if(grid[n-1][i]==1){
                 q.push({n-1,i});
                
             }
@@ -58,7 +58,7 @@ public:
                 for(int i=0;i<4;i++){
                     int newx=x+dx[i];
                     int newy=y+dy[i];
-                    if(newx>=0 and newx<n and newy>=0 and newy<m and !vis[newx][newy] and grid[newx][newy]==1){
+                    if(newx>=0 and newx<n and newy>=0 and newy<m and grid[newx][newy]==1){
                         q.push({newx,newy});
                         
                         
