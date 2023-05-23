@@ -55,7 +55,7 @@ public:
                                   vis[nrow][ncol]=1;
                               }
                                 else if(!vis[nrow][ncol] and grid[nrow][ncol]==1){
-                                    ans=min(ans,dist);
+                                   return dist;
                                     vis[nrow][ncol]=1;
                                 }
                             
