@@ -18,12 +18,12 @@ vector<int> factoristion(int n){
 	
 }
     int cnt=0;
-    void dfs(int node){
+    void dfs(int node,int par,vector<vector<int>>&adj,vector<int>&vis){
         vis[node]=1;
         cnt++;
         for(auto it:adj[node]){
             if(!vis[it]){
-                dfs(it);
+                dfs(it,node,adj,vis);
             }
         }
     }
@@ -69,7 +69,7 @@ public:
         
         
         
-        dfs(0);
+        dfs(0,-1,adj,vis);
         
        
         return cnt==n;
