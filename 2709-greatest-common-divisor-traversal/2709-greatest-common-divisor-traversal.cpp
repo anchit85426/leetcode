@@ -1,7 +1,55 @@
 int N1=1e5;
 vector<int>siv;
-vector<vector<int>> adj;
-vector<int> vis;
+class DisjointSet {
+    
+public:
+    vector<int> rank, parent, size;
+    DisjointSet(int n) {
+        rank.resize(n + 1, 0);
+        parent.resize(n + 1);
+        size.resize(n + 1);
+        for (int i = 0; i <= n; i++) {
+            parent[i] = i;
+            size[i] = 1;
+        }
+    }
+
+    int findUPar(int node) {
+        if (node == parent[node])
+            return node;
+        return parent[node] = findUPar(parent[node]);
+    }
+
+    void unionByRank(int u, int v) {
+        int ulp_u = findUPar(u);
+        int ulp_v = findUPar(v);
+        if (ulp_u == ulp_v) return;
+        if (rank[ulp_u] < rank[ulp_v]) {
+            parent[ulp_u] = ulp_v;
+        }
+        else if (rank[ulp_v] < rank[ulp_u]) {
+            parent[ulp_v] = ulp_u;
+        }
+        else {
+            parent[ulp_v] = ulp_u;
+            rank[ulp_u]++;
+        }
+    }
+
+    void unionBySize(int u, int v) {
+        int ulp_u = findUPar(u);
+        int ulp_v = findUPar(v);
+        if (ulp_u == ulp_v) return;
+        if (size[ulp_u] < size[ulp_v]) {
+            parent[ulp_u] = ulp_v;
+            size[ulp_v] += size[ulp_u];
+        }
+        else {
+            parent[ulp_v] = ulp_u;
+            size[ulp_u] += size[ulp_v];
+        }
+    }
+};
 class Solution {
 vector<int> factoristion(int n){
 	vector<int> fact;
@@ -17,20 +65,10 @@ vector<int> factoristion(int n){
 	return fact;
 	
 }
-    int cnt=0;
-    void dfs(int node,int par,vector<vector<int>>&adj,vector<int>&vis){
-        vis[node]=1;
-        cnt++;
-        for(auto it:adj[node]){
-            if(!vis[it]){
-                dfs(it,node,adj,vis);
-            }
-        }
-    }
-
 
 public:
     bool canTraverseAllPairs(vector<int>& nums) {
+            DisjointSet st(nums.size());
         siv.resize(N1+1,1);
         for(long long int  i=2;i<=N1;i++){
 		if(siv[i]==1){
@@ -46,10 +84,7 @@ public:
         
        vector<int>x(100000,-1);
         int n=nums.size();
-        adj.clear();
-        vis.clear();
-       adj.resize(n);
-        vis.resize(n);
+        
         for(int i=0;i<n;i++){
              vector<int>v=factoristion(nums[i]);
             
@@ -57,11 +92,13 @@ public:
             for(auto it:v){
                 
                 if(x[it]!=-1){
+                    st.unionBySize(i,x[it]);
                     
-                    adj[x[it]].push_back(i);
-                    adj[i].push_back(x[it]);
                 }
+                else{
+                
                 x[it]=i;
+                }
             }
         }
         
@@ -69,10 +106,15 @@ public:
         
         
         
-        dfs(0,-1,adj,vis);
+       for(auto it:st.size){
+           if(it==n){
+               return true;
+           }
+       }
+        return false;
         
        
-        return cnt==n;
+       
         
         
     }
