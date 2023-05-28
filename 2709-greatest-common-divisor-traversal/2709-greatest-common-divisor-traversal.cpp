@@ -1,66 +1,79 @@
-const int N = 1e5;
-
-vector<vector<int>> g;
-vector<bool> visited;
-
-int CountConnectedNodes (int src) {
-    if (visited[src]) return 0;
-    visited[src] = true;
-    
-    int result = 1;
-    for (auto i : g[src]) result += CountConnectedNodes(i);
-    return result;
-}
-
+int N1=1e5;
+vector<int>siv;
+vector<vector<int>> adj;
+vector<int> vis;
 class Solution {
-    vector<int> seive;
-    
-    void buildSeive() {
-        seive.resize(N+1);
-        for (long j = 2; j <= N; j ++) {
-            if (seive[j] != 0) continue;
-            
-            seive[j] = j;
-            for (long k = j*j; k <= N; k += j) 
-                if (!seive[k]) seive[k] = j;
+vector<int> factoristion(int n){
+	vector<int> fact;
+
+	while(n>1){
+		
+		int x=siv[n];
+		while(n%x==0){
+			n/=x;
+		}
+		fact.push_back(x);
+	}
+	return fact;
+	
+}
+    int cnt=0;
+    void dfs(int node){
+        vis[node]=1;
+        cnt++;
+        for(auto it:adj[node]){
+            if(!vis[it]){
+                dfs(it);
+            }
         }
     }
-    
-    vector<int> primeFactors (int x) {
-        vector<int> result;
-        while (x != 1) {
-            int f = seive[x];
-            while (x % f == 0) x /= f;
-            result.push_back(f);
-        }
-        return result;
-    } 
-    
+
+
 public:
     bool canTraverseAllPairs(vector<int>& nums) {
-        vector<int> val(N+1, -1);
-        buildSeive();
+        siv.resize(N1+1,1);
+        for(long long int  i=2;i<=N1;i++){
+		if(siv[i]==1){
+			
+			siv[i]=i;
+			for(long long int  j=i*i;j<=N1;j+=i){
+				if(siv[j]==1){
+					siv[j]=i;
+				}
+			}
+		}
+	}
         
-        int n = nums.size();    
-        if (n == 1) return true;
-        
-        g.clear(), g.resize(n);
-        visited.clear(), visited.resize(n);
-        
-        for (int j = 0; j < n; j ++) {
-            if (nums[j] == 1) return false;
+       vector<int>x(100000,-1);
+        int n=nums.size();
+        adj.clear();
+        vis.clear();
+       adj.resize(n);
+        vis.resize(n);
+        for(int i=0;i<n;i++){
+             vector<int>v=factoristion(nums[i]);
             
-            vector<int> primes = primeFactors (nums[j]);
-            for (auto p : primes) {
-                if (val[p] != -1) {
-                    g[j].push_back(val[p]);
-                    g[val[p]].push_back(j);
+          
+            for(auto it:v){
+                
+                if(x[it]!=-1){
+                    
+                    adj[x[it]].push_back(i);
+                    adj[i].push_back(x[it]);
                 }
-                val[p] = j;
+                x[it]=i;
             }
         }
         
-        if (CountConnectedNodes(0) == n) return true;
-        return false;
+        
+        
+        
+        
+        dfs(0);
+        
+       
+        return cnt==n;
+        
+        
     }
 };
