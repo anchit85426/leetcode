@@ -1,22 +1,24 @@
 class Solution {
-    vector<vector<int>>dp;
-    int solve(int prevIndex,int mask,int n){
-        if(prevIndex==n+1) return 1;
-        if(dp[prevIndex][mask]!=-1) return dp[prevIndex][mask];
-        int total=0;
-        for(int j=1;j<=n;j++){
-            if(((mask>>j)&1)==0){
-            if(prevIndex==1 or prevIndex%j==0 or j%prevIndex==0){
-                total+=solve(prevIndex+1,mask|(1<<j),n);
-                
-            }
-         }
+    int solve(vector<int>&arr,int j){
+        if(j>=arr.size()) {
+          
+            return 1;
         }
-        return dp[prevIndex][mask]=total;
+        int total=0;
+        for(int i=j;i<arr.size();i++){
+           swap(arr[i],arr[j]);
+            if((arr[j]%(j+1))==0 or ((j+1)%arr[j])==0){
+                total+=solve(arr,j+1);
+            }
+            swap(arr[i],arr[j]);
+          
+        }
+        return total;
     }
 public:
     int countArrangement(int n) {
-        dp.resize(17,vector<int>((1<<15+5),-1));
-        return solve(1,0,n);
+       vector<int>arr(n);
+        for(int i=0;i<n;i++) arr[i]=i+1;
+        return solve(arr,0);
     }
 };
