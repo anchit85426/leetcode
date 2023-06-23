@@ -16,7 +16,7 @@ class Solution {
     }
 public:
     int countArrangement(int n) {
-        dp.resize(20,vector<int>((1<<15+5),-1));
+        dp.resize(17,vector<int>((1<<15+5),-1));
         return solve(1,0,n);
     }
 };
