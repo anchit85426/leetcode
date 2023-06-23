@@ -12,23 +12,35 @@ class Solution {
     }
 public:
     long long minCost(vector<int>& nums, vector<int>& cost) {
-        int l=1;
-        int h=1e6;
-        long long int  res=-1;
-        long long int ans=1e9;
-        while(h>=l){
-            int mid=(h+l)/2;
-            long long int y1=solve(nums,mid,cost);
-            long long int y2=solve(nums,mid+1,cost);
-             res=min(y1,y2);
-            if(y1>y2){
-                l=mid+1;
-            }
-            else{
-                h=mid-1;
-            }
+        vector<int>v(1e6+1,0);
+        int i=0;
+        int  n=nums.size();
+        for(auto it :nums){
+            v[it]+=cost[i];
+            i++;
+        }
+        vector<long long >prefix(1e6+1,0),suffix(1e6+1,0);
+        long long int sum=0;
+        int x=1e6;
+        sum+=v[0];
+        
+        for(int i=1;i<=x;i++){
+            prefix[i]=prefix[i-1]+sum;
+            
+            sum+=v[i];
+        }
+        sum=0;
+        sum=v[x];
+        for(i=x-1;i>=0;i--){
+            suffix[i]=suffix[i+1]+sum;
+            sum+=v[i];
+        }
+        
+        long long  ans=1e18;
+        for(int i=0;i<x;i++){
+            ans=min(ans,prefix[i]+suffix[i]);
             
         }
-        return res;
+        return ans;
     }
 };
