@@ -13,7 +13,17 @@ class Solution {
 public:
     int lengthOfLIS(vector<int>& nums) {
         int n=nums.size();
-        dp.resize(n+5,vector<int>(n+5,-1));
-        return solve(0,nums,-1);
+        dp.resize(n+5,vector<int>(n+5,0));
+        // return solve(0,nums,-1);
+        for(int ind=n-1;ind>=0;ind--){
+            for(int prev=ind-1;prev>=-1;prev--){
+                int len=dp[ind+1][prev+1];
+                if(prev==-1 or nums[prev]<nums[ind]){
+                    len=max(len,1+dp[ind+1][ind+1]);
+                }
+                dp[ind][prev+1]=len;
+            }
+        }
+        return dp[0][0];
     }
 };
