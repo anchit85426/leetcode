@@ -11,19 +11,18 @@ class Solution {
         
     }
 public:
-    int lengthOfLIS(vector<int>& nums) {
-        int n=nums.size();
-        dp.resize(n+5,vector<int>(n+5,0));
-        // return solve(0,nums,-1);
-        for(int ind=n-1;ind>=0;ind--){
-            for(int prev=ind-1;prev>=-1;prev--){
-                int len=dp[ind+1][prev+1];
-                if(prev==-1 or nums[prev]<nums[ind]){
-                    len=max(len,1+dp[ind+1][ind+1]);
+    int lengthOfLIS(vector<int>& arr) {
+       vector<int>dp(arr.size()+1,1);
+        int n=arr.size();
+        int maxi=1;
+        for(int i=0;i<n;i++){
+            for(int j=0;j<i;j++){
+                if(arr[i]>arr[j] and dp[i]<dp[j]+1){
+                    dp[i]=dp[j]+1;
+                    maxi=max(maxi,dp[i]);
                 }
-                dp[ind][prev+1]=len;
             }
         }
-        return dp[0][0];
+        return maxi;
     }
 };
