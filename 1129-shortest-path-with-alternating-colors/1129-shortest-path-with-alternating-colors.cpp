@@ -8,7 +8,7 @@ public:
          for(auto it :blueEdges){
             graph[it[0]].push_back({it[1],1});
         }
-        vector<int>dist(n,-1);
+        vector<int>dist(n,1e9);
         vector<vector<int>> vis(n+1, vector<int>(3, 0));
         vis[0][0]=1;
         vis[0][1]=1;
@@ -22,14 +22,15 @@ public:
             q.pop();
             for(auto it :graph[node]){
                 if(it.second!=colour and vis[it.first][it.second]==0){
-                    if(dist[it.first]==-1)
-                    {
-                        dist[it.first]=1+disti;
-                    }
+                    dist[it.first]=min(dist[it.first],disti+1);
+                
                     q.push({it.first,{disti+1,it.second}});
                      vis[it.first][it.second]=1;
                 }
             }
+        }
+        for(auto &it:dist){
+            if(it==1e9) it=-1;
         }
         return dist;
     }
