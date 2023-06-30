@@ -21,11 +21,6 @@ public:
             j--;
             k--;
         }
-        while(i>=0){
-            nums[k]=nums[i];
-            k--;
-            i--;
-        }
    
     }
 };
