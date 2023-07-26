@@ -55,8 +55,6 @@ public:
     }
     
     void unlockDescendents(int num) {
-        if(descendents.count(num) == 0 || descendents[num].size() == 0)
-            return;
         
         for(int& x : descendents[num]) {
             Node[x][1] = -1;
