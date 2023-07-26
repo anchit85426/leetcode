@@ -1,86 +1,90 @@
 class LockingTree {
 public:
-    unordered_map<int, vector<int>> descendents;
-    vector<vector<int>> Node;
-    /*
-        Node[i][0] = parent[i]
-        Node[i][1] = -1; (means unlocked)
-        Node[i][1] = x;  (means locked by user x)
-    */
-    int n;
+    vector<vector<int>>v; // tree
+    //v[i][0]==parent[i];
+    // v[i][1]==-1 unlocked
+    // v[i][1]==x locked by x
+     // descedabt means all the path from the child to the leaf node or the full subtree
+    // ancestor means partent or parent of parent .....
+    map<int,vector<int>>descendant;
     LockingTree(vector<int>& parent) {
-        n = parent.size();
-        Node.resize(n, vector<int>(2, -1));
-        
-        Node[0][0] = -1; //root has no parent
-        for(int i = 1; i<n; i++) {
-            Node[i][0] = parent[i];
-            descendents[parent[i]].push_back(i);            
+        descendant.clear();
+        int n=parent.size();
+        v.resize(n,vector<int>(2,-1));
+        v[0][0]=-1;
+        for(int i=1;i<n;i++){
+            v[i][0]=parent[i];
+            descendant[parent[i]].push_back(i);
         }
     }
     
     bool lock(int num, int user) {
-        if(Node[num][1] != -1) return false;
+        if(v[num][1]!=-1) return false;
         
-        Node[num][1] = user;
+        v[num][1]=user;
         return true;
     }
     
     bool unlock(int num, int user) {
-        if(Node[num][1] != user) return false;
-        
-        Node[num][1] = -1;
+        if(v[num][1]!=user) return false;
+        v[num][1]=-1;
         return true;
     }
-    
-    //Condition-2 (Atleast one descendent should be locked)
-    void checkDescendents(int num, bool& atleastOne) {
+    bool checkDescendant(int num){
+         for(auto &it:descendant[num]){
+             if(v[it][1]!=-1){
+                 return true;
+             }
+             else{
+                 if(checkDescendant(it)==true){
+                     return true;
+                 }
+             }
+         }
+        return false;
+    }
+    bool lockedAncestors(int num){
+        // none of the Ancestors should be locked
+        // if locked return false;
+        if(num==-1) return true;
+        if(v[num][1]!=-1){
+            return false;
+        }
+        return (v[num][1]==-1) && lockedAncestors(v[num][0]);
         
         
-        for(int& x : descendents[num]) {
-            if(Node[x][1] != -1) {
-                atleastOne = true;
-                return;
-            }
-            checkDescendents(x, atleastOne);
+        
+    }
+    void unlockDes(int num){
+        for(auto &it:descendant[num]){
+            v[it][1]=-1;
+            unlockDes(it);
         }
     }
-    
-    //Condition-3 (Check if any ancestor is locked)
-    bool IsAnyAncestorLocked(int& num) {
-        if(num == -1)
-            return false; //you reached end and found none locked
-        
-        return Node[num][1] != -1 || IsAnyAncestorLocked(Node[num][0]);
-    }
-    
-    void unlockDescendents(int num) {
-        
-        for(int& x : descendents[num]) {
-            Node[x][1] = -1;
-            unlockDescendents(x);
-        }
-    }
-    
     bool upgrade(int num, int user) {
-        //condition : 1
-        if(Node[num][1] != -1) return false;
+        if(v[num][1]!=-1) return false;
         
+        bool x=checkDescendant(num);
+        if(x==false){
+            return false;
+        }
+        bool y=lockedAncestors(v[num][0]);
         
-        //condition : 2
-        bool atleastOne = false;
-        checkDescendents(num, atleastOne);
-        //If no node was locked, return false
-        if(!atleastOne) return false;
-        
-        
-        //condition : 3
-        if(IsAnyAncestorLocked(Node[num][0])) return false;
-        
-        
-        //Do the rest
-        unlockDescendents(num);
-        Node[num][1] = user;
+        if(y==false ){
+            return false;
+        }
+        // unlock descedant
+        unlockDes(num);
+        v[num][1]=user;
         return true;
+        
     }
 };
+
+/**
+ * Your LockingTree object will be instantiated and called as such:
+ * LockingTree* obj = new LockingTree(parent);
+ * bool param_1 = obj->lock(num,user);
+ * bool param_2 = obj->unlock(num,user);
+ * bool param_3 = obj->upgrade(num,user);
+ */
