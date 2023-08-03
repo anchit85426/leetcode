@@ -10,61 +10,21 @@
  */
 class Solution {
 public:
-    ListNode* mergeTwoLists(ListNode* list1, ListNode* list2) {
-        ListNode* head=NULL;
-        ListNode* head2=NULL;
-        if(list1==NULL){
-            return list2;
+    ListNode* mergeTwoLists(ListNode* l1, ListNode* l2) {
+        if(l1==NULL) return l2;
+        if(l2==NULL) return l1;
+        if(l1->val>l2->val) swap(l1,l2);
+        ListNode *res=l1;
+        while(l1!=NULL and l2!=NULL){
+            ListNode *temp=NULL;
+            while(l1!=NULL and l1->val<=l2->val){
+                temp=l1;
+                l1=l1->next;
+            }
+            temp->next=l2;
+            swap(l1,l2);
+            
         }
-        else if(list2==NULL){
-            return list1;
-        }
-        if(list1->val<list2->val){
-            ListNode* node=new ListNode();
-            head=node;
-            head2=node;
-            node->val=list1->val;
-            list1=list1->next;
-        }
-        else{
-            ListNode* node=new ListNode();
-            head=node;
-            head2=node;
-            node->val=list2->val;
-            list2=list2->next;
-        }
-        while(list1!=NULL and list2!=NULL){
-              if(list1->val<list2->val){
-                  
-              ListNode* node=new ListNode();
-              head->next=node;
-              node->val=list1->val;
-              list1=list1->next;
-              head=node;
-        }
-        else{
-            ListNode* node=new ListNode();
-            head->next=node;
-            node->val=list2->val;
-            list2=list2->next;
-            head=node;
-        }
-    }
-   while(list1!=NULL){
-       ListNode* node=new ListNode();
-       head->next=node;
-       node->val=list1->val;
-       list1=list1->next;
-       head=node;
-   }
-        while(list2!=NULL){
-        ListNode* node=new ListNode();
-        head->next=node;
-        // cout<<list2->val<<endl;
-        node->val=list2->val;
-        list2=list2->next;
-            head=node;
-   }
-    return head2;
+        return res;
     }
 };
