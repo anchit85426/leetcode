@@ -1,23 +1,29 @@
 class Solution {
 public:
     int minTaps(int n, vector<int>& ranges) {
+        vector<int>v(n+1,0);
+        for(int i=0;i<=n;i++){
+            int l=max(0,i-ranges[i]);
+            int r=min(n,i+ranges[i]);
+            v[l]=max(v[l],r);
+        }
         int ans=0;
-        int min=0;
-        int max=0;
-        int index=0;
-        while(max<n){
-            for(int i=index;i<=n;i++){
-                if(i-ranges[i]<=min and i+ranges[i]>max){
-                    max=i+ranges[i];
-                    index=i;
-                }
-                
+        int curr_end=0;
+        int max_end=0;
+        
+        for(int i=0;i<=n;i++){
+            if(i>curr_end){
+                return -1;
             }
-            if(max==min){
-                    return -1;
+            max_end=max(max_end,v[i]);
+            if(curr_end==i){
+                
+                ans++;
+                if(i==n){
+                    return ans-1;
                 }
-            ans++;
-            min=max;
+                curr_end=max_end;
+            }
         }
         return ans;
     }
