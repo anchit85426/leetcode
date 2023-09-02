@@ -2,23 +2,23 @@ class Solution {
 public:
     bool canReach(string s, int minJump, int maxJump) {
        int n=s.size();
-        queue<int>q;
-        q.push(0);
-        int curr_max=0;
-        while(!q.empty()){
-            int node=q.front();
-            q.pop();
-            if(node==n-1){
-                return true;
+        vector<bool>dp(n,false);
+        dp[0]=true;
+        int reacable=0;
+        for(int i=1;i<n;i++){
+            if(i>=minJump){
+                reacable+=dp[i-minJump];
             }
-            for(int i=max(curr_max,node+minJump);i<=min(n-1,maxJump+node);i++){
-                if(s[i]=='0'){
-                    q.push(i);
-                    
-                }
+            if(i>maxJump){
+                reacable-=dp[i-maxJump-1];
             }
-            curr_max=min(n-1,maxJump+node)+1;
+            if(reacable>0 and s[i]=='0'){
+                dp[i]=true;
+            }
+            else{
+                dp[i]=false;
+            }
         }
-        return false;
+        return dp[n-1];
     }
 };
