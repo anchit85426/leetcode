@@ -4,9 +4,10 @@ public:
         map<int,int>mpp;
         mpp[0]=1;
         int ans=0;
+       
         int prefix=0;
         for(auto it :nums){
-            prefix+=it%k+k;
+            prefix=(prefix+it%k+k)%k;
             if(mpp[(prefix)%k]){
                 ans+=mpp[(prefix)%k];
             }
